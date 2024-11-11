@@ -30,12 +30,12 @@ F.conecta(H, 3)
 
 const arr = [A, B, C, D, E, F, G, H]
 
-const desde_A = new findPath(arr, A, D)
+const desde_A = new findPath(arr, A, H)
 
 console.log(" ----- SALTOS DESDE A -----")
 
 desde_A.distancias()
 
-console.log(" -----RECORRIDO MAS CORTO HACIA D -----")
+console.log(" -----RECORRIDO MAS CORTO HACIA EL DESTINO -----")
 
 console.log(desde_A.caminoHacia(H))

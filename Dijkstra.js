@@ -25,7 +25,6 @@ const Dijkstra = function (dataset, start, stop) {
             this.llamadas += 1
             const aristas = this.data[actual].aristasSalientes().sort((a, b) => a.peso - b.peso)
 
-            //seteo y reseteo distancias
             aristas.forEach(arista => {
                 let index = this.data.indexOf(arista.target)
                 if (this.etiquetas[index].marcado == false)
@@ -54,9 +53,6 @@ const Dijkstra = function (dataset, start, stop) {
 
     this.algoritmo(this.start, 0, 0)
 
-    console.log("LLAMADAS: " + this.llamadas)
-
-
     this.distancias = function () {
         this.etiquetas.forEach(etiqueta => {
             let prev = "-"
@@ -67,16 +63,22 @@ const Dijkstra = function (dataset, start, stop) {
         })
     }
 
-    this.caminoHacia = function (_destino) {
-        if (this.encuentra) {
+    this.recorrerEnInversa = function (_destino) {
+        //if (this.encuentra) {
             let destino = typeof _destino == "number" ? _destino : this.data.indexOf(_destino)//INDEX
             let respuesta = this.etiquetas[destino].nombre
             if (this.etiquetas[destino].anterior != undefined) {
-                respuesta = this.caminoHacia(this.etiquetas[destino].anterior) + "--->" + this.etiquetas[destino].nombre
+                respuesta = this.recorrerEnInversa(this.etiquetas[destino].anterior) + "--->" + this.etiquetas[destino].nombre
             }
             return respuesta
-        }
-        return "No lo encontró."
+       // }
+        //return "No lo encontró."
+    }
+
+    this.caminoHacia = function(_destino){
+        //console.log("Llamadas: " + this.llamadas)
+        console.log(this.recorrerEnInversa(_destino))
+
     }
 
 
