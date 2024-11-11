@@ -1,43 +1,60 @@
-const Dijkstra = function (dataset, start) {
+const Dijkstra = function (dataset, start, stop) {
     this.data = dataset
     this.start = typeof this.start == "number" ? start : this.data.indexOf(start)//INDEX
+    this.stop = typeof this.stop == "number" ? stop : this.data.indexOf(stop)//INDEX
 
     this.etiquetas = this.data.map(nodo => {
         return {
             nombre: nodo.nombre(),
             acumulado: 0,//peso acumulado hacia aqui
             anterior: undefined,//nodo anterior
+            marcado: false,
+
             iteracion: 0,
-            set : false
+
         }
     })
 
+    this.llamadas = 0
+    this.encuentra = false
 
-    this.algoritmo = function (actual, anterior, acumulado, iteracion) {
-        const MAX_ITER = 10
-        if (iteracion < MAX_ITER ) {
+    const MAX_LEN = 1000
+
+    this.algoritmo = function (actual, acumulado, iteracion) {
+        if (acumulado < MAX_LEN && !this.encuentra) {
+            this.llamadas += 1
             const aristas = this.data[actual].aristasSalientes().sort((a, b) => a.peso - b.peso)
 
-            if (acumulado < this.etiquetas[actual].acumulado || this.etiquetas[actual].acumulado == 0 ) {
-                this.etiquetas[actual].acumulado = acumulado
-                this.etiquetas[actual].anterior = anterior
-                this.etiquetas[actual].iteracion = iteracion
-            }
-
-
+            //seteo y reseteo distancias
             aristas.forEach(arista => {
-                const nuevoAcumulado = arista.peso + acumulado
-                const siguiente = this.data.indexOf(arista.target)
-                if (siguiente != anterior && siguiente != this.start ) {/// feo horrible
-                    this.algoritmo(siguiente, actual, nuevoAcumulado, iteracion + 1)
-                }
+                let index = this.data.indexOf(arista.target)
+                if (this.etiquetas[index].marcado == false)
+                    if (acumulado + arista.peso < this.etiquetas[index].acumulado || this.etiquetas[index].anterior == undefined) {
+                        this.etiquetas[index].acumulado = acumulado + arista.peso
+                        this.etiquetas[index].anterior = actual
+                        this.etiquetas[index].iteracion = iteracion + 1
+                    }
             })
 
-            this.etiquetas[actual].set = true///// ? no hace nada realmente.
+            this.etiquetas[actual].marcado = true
+
+            if (actual == this.stop) {
+                this.encuentra = true
+            }
+
+            aristas.forEach(arista => {
+                let index = this.data.indexOf(arista.target)
+                if (this.etiquetas[index].marcado == false)
+                    this.algoritmo(index, this.etiquetas[index].acumulado, iteracion + 1)
+            })
 
         }
     }
-    this.algoritmo(this.start, undefined, 0, 0)
+
+
+    this.algoritmo(this.start, 0, 0)
+
+    console.log("LLAMADAS: " + this.llamadas)
 
 
     this.distancias = function () {
@@ -51,12 +68,15 @@ const Dijkstra = function (dataset, start) {
     }
 
     this.caminoHacia = function (_destino) {
-        let destino = typeof _destino == "number" ? _destino : this.data.indexOf(_destino)//INDEX
-        let respuesta = this.etiquetas[destino].nombre
-        if (this.etiquetas[destino].anterior != undefined) {
-            respuesta = this.caminoHacia(this.etiquetas[destino].anterior) + "--->" + this.etiquetas[destino].nombre
+        if (this.encuentra) {
+            let destino = typeof _destino == "number" ? _destino : this.data.indexOf(_destino)//INDEX
+            let respuesta = this.etiquetas[destino].nombre
+            if (this.etiquetas[destino].anterior != undefined) {
+                respuesta = this.caminoHacia(this.etiquetas[destino].anterior) + "--->" + this.etiquetas[destino].nombre
+            }
+            return respuesta
         }
-        return respuesta
+        return "No lo encontró."
     }
 
 

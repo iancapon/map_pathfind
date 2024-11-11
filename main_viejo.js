@@ -1,5 +1,5 @@
 const { Nodo } = require("./Mapa")
-const { findPath } = require("./Dijkstra")
+const { findPath } = require("./Dijkstra_viejo")
 
 const A = new Nodo("A")
 const B = new Nodo("B")
@@ -30,12 +30,13 @@ F.conecta(H, 3)
 
 const arr = [A, B, C, D, E, F, G, H]
 
-const desde_A = new findPath(arr, A, D)
+const desde_A = new findPath(arr, A)
 
 console.log(" ----- SALTOS DESDE A -----")
 
 desde_A.distancias()
 
-console.log(" -----RECORRIDO MAS CORTO HACIA D -----")
+console.log(" -----RECORRIDO MAS CORTO HACIA H -----")
+
 
 console.log(desde_A.caminoHacia(H))
