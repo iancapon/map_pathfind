@@ -1,4 +1,4 @@
-const { Nodo, Arista } = require("./Mapa")
+const { Nodo } = require("./Mapa")
 const { findPath } = require("./Dijkstra")
 
 const A = new Nodo("A")

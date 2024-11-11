@@ -7,7 +7,6 @@ const Nodo = function (nombre) {
         let result = ""
         this.entradas.forEach(arista => result += arista.datos() + "\n")
         return result
-        //return this.entradas.length == 0 ? "" : this.entradas.reduce((arista, result) => result += arista.datos() + "\n")
     }
 
     this.verSalidas = function () {
