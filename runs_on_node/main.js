@@ -38,4 +38,4 @@ desde_A.distancias()
 
 console.log(" -----RECORRIDO MAS CORTO HACIA EL DESTINO -----")
 
-console.log(desde_A.caminoHacia(H))
+desde_A.caminoHacia(H)
