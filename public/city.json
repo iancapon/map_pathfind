@@ -1,0 +1,10 @@
+{
+    "calles":[
+        {"inicio":"A", "fin":"B", "sentido":"doble", "geometria":[{"x":100, "y":100}, {"x":200, "y":100}] },
+        {"inicio":"B", "fin":"C", "sentido":"doble", "geometria":[{"x":200, "y":100}, {"x":300, "y":100}] },
+        {"inicio":"A", "fin":"D", "sentido":"doble", "geometria":[{"x":100, "y":100}, {"x":100, "y":200}] },
+        {"inicio":"B", "fin":"E", "sentido":"doble", "geometria":[{"x":200, "y":100}, {"x":200, "y":200}] },
+        {"inicio":"D", "fin":"E", "sentido":"doble", "geometria":[{"x":100, "y":200}, {"x":200, "y":200}] }
+
+    ]
+}

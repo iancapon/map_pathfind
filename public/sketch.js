@@ -1,43 +1,24 @@
-let A, B, C, D, E, F, G, H
-let nodos
-let desde_A
+let nodos = []
+let aristas = []
+let DIJKSTRA
+let ciudad
+
+function preload() {
+    ciudad = loadJSON("./city.json")
+}
+
 
 function setup() {
     createCanvas(800, 800)
+    cargarNodos()
+    cargarAristas()
 
-    A = new Nodo("A", 100, 100)
-    B = new Nodo("B", 150, 50)
-    C = new Nodo("C", 150, 150)
-    D = new Nodo("D", 200, 100)
-    E = new Nodo("E", 300, 100)
-    F = new Nodo("F", 250, 150)
-    G = new Nodo("G", 250, 50)
-    H = new Nodo("H", 350, 100)
+    DIJKSTRA = new Dijkstra(nodos, nodos.find(n => n.nombre() == "D"), nodos.find(n => n.nombre() == "E"))
 
-    A.conecta(B, 3)
-    A.conecta(C, 1)
-
-    B.conecta(D, 1)
-    B.conecta(G, 5)
-
-    C.conecta(D, 2)
-    C.conecta(F, 5)
-
-    D.conecta(E, 4)
-    D.conecta(F, 2)
-
-    E.conecta(G, 2)
-    E.conecta(H, 1)
-
-    F.conecta(H, 3)
-
-    nodos = [A, B, C, D, E, F, G, H]
-
-    desde_A = new Dijkstra(nodos, A, H)
-
-    //console.log(desde_A.caminoHacia(H))
     textAlign(CENTER, CENTER)
+    noLoop()
 }
+
 
 
 function draw() {
@@ -53,14 +34,56 @@ function draw() {
         })
     })
 
-    desde_A.caminoHacia(F)
+    DIJKSTRA.caminoHacia(nodos.find(n => n.nombre() == "B"))
     stroke(0)
 
     nodos.forEach(n => {
-        circle(n.x(), n.y(), 20)
+        circle(n.x(), n.y(), 10)
+        textSize(5)
+        strokeWeight(0.5)
         text(n.nombre(), n.x(), n.y())
     })
+}
 
-    
 
+
+function cargarAristas() {
+    aristas.forEach(calle => {
+        let inicio = nodos.find(nodo => nodo.nombre() == calle.inicio)
+        let fin = nodos.find(nodo => nodo.nombre() == calle.fin)
+        if (inicio != undefined && fin != undefined) {
+            if (calle.sentido == "doble") {
+                inicio.conecta(fin, 1)
+            }
+            if (calle.sentido == "simple") {
+                inicio.apunta(fin, 1)
+            }
+        }
+    })
+}
+
+
+
+function cargarNodos() {
+    ciudad.calles.forEach(calle => {
+        aristas.push(calle)
+        let i = nodos.indexOf(nodo => calle.inicio == nodos.nombre())
+        if (i >= 0) {
+            let pos = calle.geometria[0]
+            nodos[i].x = pos.x
+            nodos[i].y = pos.y
+        } else {
+            nodos.push(new Nodo(calle.inicio, calle.geometria[0].x, calle.geometria[0].y))
+        }
+
+        i = nodos.indexOf(nodo => calle.fin == nodos.nombre())
+        if (i >= 0) {
+            let pos = calle.geometria[1]
+            nodos[i].x = pos.x
+            nodos[i].y = pos.y
+        } else {
+            nodos.push(new Nodo(calle.fin, calle.geometria[1].x, calle.geometria[1].y))
+        }
+
+    })
 }

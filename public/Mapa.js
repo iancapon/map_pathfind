@@ -47,13 +47,3 @@ const Arista = function (origen, target, peso) {
         return this.origen.nombre() + " apunta a " + this.target.nombre() + " con peso de " + String(this.peso)
     }
 }
-
-
-
-
-
-/*
-module.exports = {
-    Nodo: Nodo,
-    Arista: Arista,
-}*/
